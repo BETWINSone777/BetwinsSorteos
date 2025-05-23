@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BETWINS Sorteo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('logo_betwins_watermark.png') center center no-repeat;
+      background-size: contain;
+      background-color: #f9f9f9;
+      text-align: center;
+      padding: 40px 20px;
+      color: #333;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    form {
+      background: rgba(255,255,255,0.9);
+      display: inline-block;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 280px;
+      padding: 12px;
+      font-size: 16px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      margin: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #0056b3;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #003e84;
+    }
+    ul {
+      text-align: left;
+      max-width: 300px;
+      margin: 20px auto 0;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Inscripción al Sorteo BETWINS</h1>
+  <form id="formulario">
+    <input type="text" id="usuario" placeholder="Nombre de usuario" required />
+    <br />
+    <button type="button" onclick="registrarUsuario()">Inscribirme</button>
+    <button type="button" onclick="mostrarParticipantes()">Ver Participantes</button>
+  </form>
+
+  <ul id="listaParticipantes" class="hidden"></ul>
+
+  <script>
+    const STORAGE_KEY = 'betwins_participantes';
+
+    function obtenerParticipantes() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }
+
+    function guardarParticipantes(lista) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+    }
+
+    function registrarUsuario() {
+      const input = document.getElementById('usuario');
+      const nombre = input.value.trim().toLowerCase();
+
+      if (!nombre) {
+        alert('Por favor ingresa tu nombre de usuario.');
+        return;
+      }
+
+      let participantes = obtenerParticipantes();
+      if (participantes.includes(nombre)) {
+        alert('Ya estás registrado.');
+        return;
+      }
+
+      participantes.push(nombre);
+      guardarParticipantes(participantes);
+      alert('¡Inscripción exitosa!');
+      input.value = '';
+    }
+
+    function mostrarParticipantes() {
+      const lista = document.getElementById('listaParticipantes');
+      const participantes = obtenerParticipantes();
+
+      if (participantes.length === 0) {
+        alert('No hay participantes todavía.');
+        return;
+      }
+
+      lista.innerHTML = participantes.map(p => `<li>${p}</li>`).join('');
+      lista.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
+<body style="background: url('logo_betwins.jpeg') no-repeat center center fixed; background-size: cover;">
